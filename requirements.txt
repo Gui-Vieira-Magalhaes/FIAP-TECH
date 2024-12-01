@@ -4,3 +4,4 @@ streamlit
 prophet
 scikit-learn
 xgboost
+tensorflow
