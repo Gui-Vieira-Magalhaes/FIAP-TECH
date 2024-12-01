@@ -83,14 +83,15 @@ fig, ax = plt.subplots(figsize=(12, 6))
 ax.plot(data['Date'], data['Price'], label='Preço do Petróleo', color='blue', alpha=0.7)
 ax.plot(data['Date'], data['Moving_Average'], label=f'Média Móvel ({window_size} dias)', color='orange', linestyle='--')
 
-# Adicionar eventos históricos com posicionamento ajustado
+# Adicionar eventos históricos com textos na vertical
 for event_date, event_desc in historical_events.items():
     event_date_parsed = pd.to_datetime(event_date)
     if event_date_parsed in data['Date'].values:
         ax.axvline(event_date_parsed, color='red', linestyle='--', alpha=0.8)
-        y_position = data['Price'].min() + 0.1 * (data['Price'].max() - data['Price'].min())  # Ajustar altura no gráfico
+        y_position = data['Price'].min() + 0.1 * (data['Price'].max() - data['Price'].min())  # Ajustar altura inicial no gráfico
         ax.text(event_date_parsed, y_position, event_desc, fontsize=9, color='black',
                 verticalalignment='bottom', horizontalalignment='center', alpha=0.7,
+                rotation=90,  # Textos orientados verticalmente
                 bbox=dict(boxstyle="round,pad=0.3", edgecolor="gray", facecolor="white", alpha=0.8))
 
 ax.set_title('Preço do Petróleo com Média Móvel e Eventos Históricos')
