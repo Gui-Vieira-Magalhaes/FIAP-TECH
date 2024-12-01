@@ -82,16 +82,23 @@ data['Moving_Average'] = calculate_moving_average(data, window_size)
 fig, ax = plt.subplots(figsize=(12, 6))
 ax.plot(data['Date'], data['Price'], label='Preço do Petróleo', color='blue', alpha=0.7)
 ax.plot(data['Date'], data['Moving_Average'], label=f'Média Móvel ({window_size} dias)', color='orange', linestyle='--')
+
+# Adicionar eventos históricos com posicionamento ajustado
 for event_date, event_desc in historical_events.items():
     event_date_parsed = pd.to_datetime(event_date)
     if event_date_parsed in data['Date'].values:
         ax.axvline(event_date_parsed, color='red', linestyle='--', alpha=0.8)
-        ax.text(event_date_parsed, data['Price'].max(), event_desc, rotation=90, verticalalignment='center', fontsize=9, alpha=0.7)
+        y_position = data['Price'].min() + 0.1 * (data['Price'].max() - data['Price'].min())  # Ajustar altura no gráfico
+        ax.text(event_date_parsed, y_position, event_desc, fontsize=9, color='black',
+                verticalalignment='bottom', horizontalalignment='center', alpha=0.7,
+                bbox=dict(boxstyle="round,pad=0.3", edgecolor="gray", facecolor="white", alpha=0.8))
+
 ax.set_title('Preço do Petróleo com Média Móvel e Eventos Históricos')
 ax.set_xlabel('Data')
 ax.set_ylabel('Preço (USD)')
 ax.legend()
 st.pyplot(fig)
+
 
 # Modelo LSTM
 st.subheader("Previsão com LSTM")
