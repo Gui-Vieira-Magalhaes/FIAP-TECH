@@ -2,3 +2,5 @@ matplotlib
 pandas
 streamlit
 prophet
+scikit-learn
+xgboost
