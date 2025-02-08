@@ -89,6 +89,30 @@ if st.sidebar.radio("Navegação", ["🏆 Conceitos", "📊 Predição do IAA"])
     fig, ax = plt.subplots(figsize=(10, 6))
     sns.heatmap(df.corr(), annot=True, cmap="coolwarm", fmt=".2f", linewidths=0.5, ax=ax)
     st.pyplot(fig)
+    
+    # Gráfico 1 - Distribuição do IAA
+    st.write("### 🎯 Distribuição do IAA")
+    fig, ax = plt.subplots()
+    sns.histplot(df[target], bins=20, kde=True, ax=ax)
+    st.pyplot(fig)
+    
+    # Gráfico 2 - Boxplot das Notas
+    st.write("### 🎯 Boxplot das Notas de Matemática e Português")
+    fig, ax = plt.subplots()
+    sns.boxplot(data=df, y=["NOTA_MAT", "NOTA_PORT"], ax=ax)
+    st.pyplot(fig)
+    
+    # Gráfico 3 - Relação entre IAA e INDE
+    st.write("### 🎯 Relação entre IAA e INDE")
+    fig, ax = plt.subplots()
+    sns.scatterplot(data=df, x="INDE", y=target, ax=ax)
+    st.pyplot(fig)
+    
+    # Gráfico 4 - Comparação de Engajamento (IEG) por Fase Acadêmica
+    st.write("### 🎯 Comparação de Engajamento (IEG) por Fase Acadêmica")
+    fig, ax = plt.subplots()
+    sns.boxplot(data=df, x="FASE", y="IEG", ax=ax)
+    st.pyplot(fig)
 
 else:
     st.markdown("# 🏆 POSTECH - DTAT - Datathon - Fase 5")
