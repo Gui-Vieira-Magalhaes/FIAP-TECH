@@ -99,7 +99,7 @@ if st.sidebar.radio("Navegação", ["🏆 Conceitos", "📊 Predição do IAA"])
     # Gráfico 2 - Boxplot das Notas
     st.write("### 🎯 Boxplot das Notas de Matemática e Português")
     fig, ax = plt.subplots()
-    sns.boxplot(data=df, y=["NOTA_MAT", "NOTA_PORT"], ax=ax)
+    sns.boxplot(data=df.melt(value_vars=["NOTA_MAT", "NOTA_PORT"], var_name='Disciplina', value_name='Nota'), x='Disciplina', y='Nota', ax=ax)
     st.pyplot(fig)
     
     # Gráfico 3 - Relação entre IAA e INDE
