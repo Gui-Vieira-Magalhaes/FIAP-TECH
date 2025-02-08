@@ -13,32 +13,25 @@ from sklearn.metrics import mean_absolute_error, mean_squared_error, r2_score
 # Configuração da página
 st.set_page_config(page_title="POSTECH - DTAT - Datathon - Fase 5", layout="wide")
 
-# Criar páginas
-menu = st.sidebar.radio("Navegação", ["🏆 Conceitos", "📊 Predição do IAA"])
+# Carregar os dados do CSV
+def carregar_dados():
+    file_path = "PEDE_PASSOS_DATASET_FIAP.csv"  # Atualizar conforme necessário
+    df = pd.read_csv(file_path, delimiter=";")
+    return df
 
-# Gerar dados fictícios (simulando um dataset similar ao real)
-def gerar_dados():
-    np.random.seed(42)
-    tamanho = 1000
-    dados = {
-        "INDE": np.random.uniform(5, 10, tamanho),
-        "IEG": np.random.uniform(5, 10, tamanho),
-        "IPV": np.random.uniform(5, 10, tamanho),
-        "IDA": np.random.uniform(3, 9, tamanho),
-        "NOTA_MAT": np.random.uniform(3, 10, tamanho),
-        "NOTA_PORT": np.random.uniform(3, 10, tamanho),
-        "CG": np.random.uniform(0, 10, tamanho),
-        "CT": np.random.uniform(0, 10, tamanho),
-        "QTD_AVAL": np.random.randint(2, 5, tamanho),
-        "FASE": np.random.randint(1, 7, tamanho),
-        "IAA": np.random.uniform(5, 10, tamanho),
-    }
-    return pd.DataFrame(dados)
+df = carregar_dados()
 
-# Gerar e treinar os modelos automaticamente
-df = gerar_dados()
-X = df.drop(columns=["IAA"])
-y = df["IAA"]
+# Selecionar as colunas relevantes para a modelagem
+features = [
+    "INDE_2022", "IEG_2022", "IPV_2022", "IDA_2022", "NOTA_MAT_2022", "NOTA_PORT_2022",
+    "CG_2022", "CT_2022", "QTD_AVAL_2022", "FASE_2022"
+]
+target = "IAA_2022"
+
+# Remover valores nulos
+df = df[features + [target]].dropna()
+X = df[features]
+y = df[target]
 
 # Normalizar os dados
 scaler = StandardScaler()
@@ -55,14 +48,11 @@ rf_model.fit(X_train, y_train)
 nn_model = MLPRegressor(hidden_layer_sizes=(50, 50), max_iter=1000, random_state=42)
 nn_model.fit(X_train, y_train)
 
-if menu == "🏆 Conceitos":
+if st.sidebar.radio("Navegação", ["🏆 Conceitos", "📊 Predição do IAA"]) == "🏆 Conceitos":
     st.markdown("# 🏆 POSTECH - DTAT - Datathon - Fase 5")
     st.markdown("### 📌 Integrantes do Grupo: Fábio Cervantes Lima, Guilherme Vieira Magalhães")
     st.write("### ℹ️ O que é o IAA?")
-    st.write("O Índice de Aproveitamento Acadêmico (IAA) é uma métrica que avalia o desempenho do aluno com base em diversos fatores como notas, engajamento e participação.")
-    
-    st.write("### 📊 Escolha do Modelo Preditivo")
-    st.write("O **Random Forest** foi escolhido devido à sua robustez em prever valores numéricos, resistência a overfitting e boa interpretabilidade. Além disso, treinamos um modelo de **Redes Neurais** para avaliar qual dos dois apresenta melhor aderência ao nosso conjunto de dados.")
+    st.write("O Índice de Aproveitamento Acadêmico (IAA) mede o desempenho acadêmico dos alunos levando em consideração notas, participação e engajamento. Essa métrica ajuda a avaliar a evolução dos estudantes ao longo do tempo e pode ser utilizada para prever o desempenho futuro, possibilitando intervenções educacionais estratégicas.")
     
     # Avaliação dos modelos
     rf_pred = rf_model.predict(X_test)
@@ -86,16 +76,21 @@ if menu == "🏆 Conceitos":
     st.write(f"- **Erro Absoluto Médio (MAE):** {nn_mae:.2f}")
     st.write(f"- **Raiz do Erro Quadrático Médio (RMSE):** {nn_rmse:.2f}")
     st.write(f"- **Coeficiente de Determinação (R²):** {nn_r2:.2f}")
+    
+    st.write("### 📊 Escolha do Modelo Preditivo")
+    st.write("O **Random Forest** foi escolhido devido à sua robustez em prever valores numéricos, resistência a overfitting e boa interpretabilidade. Por outro lado, **Redes Neurais** podem capturar padrões mais complexos, mas exigem maior poder computacional e são mais difíceis de interpretar. Observamos que, para nosso conjunto de dados, o **Random Forest teve melhor aderência**.")
 
-elif menu == "📊 Predição do IAA":
+else:
     st.markdown("# 🏆 POSTECH - DTAT - Datathon - Fase 5")
     st.markdown("### 📌 Integrantes do Grupo: Fábio Cervantes Lima, Guilherme Vieira Magalhães")
     st.write("## 🎯 Insira os dados do aluno para prever o IAA")
     
+    col1, col2, col3 = st.columns(3)
     dados_usuario = []
-    for feature in X.columns:
-        valor = st.number_input(f"{feature}", min_value=0.0, max_value=10.0, step=0.1, value=5.0)
-        dados_usuario.append(valor)
+    for i, feature in enumerate(features):
+        with [col1, col2, col3][i % 3]:
+            valor = st.number_input(f"{feature}", min_value=0.0, max_value=10.0, step=0.1, value=5.0)
+            dados_usuario.append(valor)
     
     if st.button("🔍 Prever IAA"):
         dados_usuario_np = np.array(dados_usuario).reshape(1, -1)
@@ -105,3 +100,4 @@ elif menu == "📊 Predição do IAA":
         
         st.success(f"🎯 Previsão do IAA com Random Forest: {rf_previsao:.2f}")
         st.success(f"🎯 Previsão do IAA com Redes Neurais: {nn_previsao:.2f}")
+        st.write("📌 **Baseado na avaliação dos modelos, a predição do Random Forest é a mais aderente ao conjunto de dados.**")
