@@ -141,6 +141,7 @@ else:
         st.write("- **FASE**: Fase Acadêmica")
     
     st.write("## 🎯 Insira os dados do aluno para prever o IAA")
+    st.write("Os dados foram previamente preenchidos com os dados médios do dataset")
     col1, col2, col3 = st.columns(3)
     dados_usuario = []
     for i, feature in enumerate(feature_names.values()):
