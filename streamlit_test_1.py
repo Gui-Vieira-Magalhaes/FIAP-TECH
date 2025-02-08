@@ -95,15 +95,31 @@ else:
     st.markdown("### 📌 Integrantes do Grupo: Fábio Cervantes Lima, Guilherme Vieira Magalhães")
     
     st.write("## 🎯 Explicação das Variáveis")
-    for feature in feature_names.values():
-        media_valor = min(10.0, max(0.0, df[feature].mean()))
-        st.write(f"- **{feature}** ({media_valor:.2f}): {feature} representa um aspecto importante da avaliação acadêmica.")
+    col1, col2, col3 = st.columns(3)
+    with col1:
+        st.write("### Variáveis Acadêmicas")
+        st.write("- **INDE**: Índice de Desenvolvimento Educacional")
+        st.write("- **IEG**: Índice de Engajamento Geral")
+        st.write("- **IPV**: Índice de Ponto de Virada")
+    with col2:
+        st.write("### Notas e Avaliações")
+        st.write("- **IDA**: Índice de Desenvolvimento Acadêmico")
+        st.write("- **NOTA_MAT**: Nota de Matemática")
+        st.write("- **NOTA_PORT**: Nota de Português")
+    with col3:
+        st.write("### Outras Variáveis")
+        st.write("- **CG**: Carga de Grau")
+        st.write("- **CT**: Carga Total")
+        st.write("- **QTD_AVAL**: Quantidade de Avaliações")
+        st.write("- **FASE**: Fase Acadêmica")
     
     st.write("## 🎯 Insira os dados do aluno para prever o IAA")
+    col1, col2, col3 = st.columns(3)
     dados_usuario = []
-    for feature in feature_names.values():
-        valor = st.number_input(f"{feature}", min_value=0.0, max_value=10.0, step=0.1, value=min(10.0, max(0.0, df[feature].mean())))
-        dados_usuario.append(valor)
+    for i, feature in enumerate(feature_names.values()):
+        with [col1, col2, col3][i % 3]:
+            valor = st.number_input(f"{feature}", min_value=0.0, max_value=10.0, step=0.1, value=min(10.0, max(0.0, df[feature].mean())))
+            dados_usuario.append(valor)
     
     if st.button("🔍 Prever IAA"):
         dados_usuario_np = np.array(dados_usuario).reshape(1, -1)
@@ -114,4 +130,5 @@ else:
         st.success(f"🎯 Previsão do IAA com Random Forest: {rf_previsao:.2f}")
         st.success(f"🎯 Previsão do IAA com Redes Neurais: {nn_previsao:.2f}")
         st.write("📌 **Baseado na avaliação dos modelos, a predição do Random Forest é a mais aderente ao conjunto de dados.**")
+
 
