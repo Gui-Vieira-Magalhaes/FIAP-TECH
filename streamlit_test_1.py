@@ -3,6 +3,7 @@ import numpy as np
 import pandas as pd
 import joblib
 import matplotlib.pyplot as plt
+import seaborn as sns
 from sklearn.model_selection import train_test_split
 from sklearn.preprocessing import StandardScaler
 from sklearn.ensemble import RandomForestRegressor
@@ -15,29 +16,33 @@ st.set_page_config(page_title="POSTECH - DTAT - Datathon - Fase 5", layout="wide
 st.markdown("# 🏆 POSTECH - DTAT - Datathon - Fase 5")
 st.markdown("### 📌 Integrantes do Grupo: Fábio Cervantes Lima, Guilherme Vieira Magalhães")
 
+# Explicação sobre IAA_2022
+st.write("### ℹ️ O que é o IAA?")
+st.write("O Índice de Aproveitamento Acadêmico (IAA) é uma métrica que avalia o desempenho do aluno com base em diversos fatores como notas, engajamento e participação.")
+
 # Gerar dados fictícios (simulando um dataset similar ao real)
 def gerar_dados():
     np.random.seed(42)
     tamanho = 1000
     dados = {
-        "INDE_2022": np.random.uniform(5, 10, tamanho),
-        "IEG_2022": np.random.uniform(5, 10, tamanho),
-        "IPV_2022": np.random.uniform(5, 10, tamanho),
-        "IDA_2022": np.random.uniform(3, 9, tamanho),
-        "NOTA_MAT_2022": np.random.uniform(3, 10, tamanho),
-        "NOTA_PORT_2022": np.random.uniform(3, 10, tamanho),
-        "CG_2022": np.random.uniform(0, 10, tamanho),
-        "CT_2022": np.random.uniform(0, 10, tamanho),
-        "QTD_AVAL_2022": np.random.randint(2, 5, tamanho),
-        "FASE_2022": np.random.randint(1, 7, tamanho),
-        "IAA_2022": np.random.uniform(5, 10, tamanho),
+        "INDE": np.random.uniform(5, 10, tamanho),
+        "IEG": np.random.uniform(5, 10, tamanho),
+        "IPV": np.random.uniform(5, 10, tamanho),
+        "IDA": np.random.uniform(3, 9, tamanho),
+        "NOTA_MAT": np.random.uniform(3, 10, tamanho),
+        "NOTA_PORT": np.random.uniform(3, 10, tamanho),
+        "CG": np.random.uniform(0, 10, tamanho),
+        "CT": np.random.uniform(0, 10, tamanho),
+        "QTD_AVAL": np.random.randint(2, 5, tamanho),
+        "FASE": np.random.randint(1, 7, tamanho),
+        "IAA": np.random.uniform(5, 10, tamanho),
     }
     return pd.DataFrame(dados)
 
 # Gerar e treinar o modelo automaticamente
 df = gerar_dados()
-X = df.drop(columns=["IAA_2022"])
-y = df["IAA_2022"]
+X = df.drop(columns=["IAA"])
+y = df["IAA"]
 
 # Normalizar os dados
 scaler = StandardScaler()
@@ -62,19 +67,39 @@ st.write(f"- **Erro Absoluto Médio (MAE):** {mae:.2f}")
 st.write(f"- **Raiz do Erro Quadrático Médio (RMSE):** {rmse:.2f}")
 st.write(f"- **Coeficiente de Determinação (R²):** {r2:.2f}")
 
+# Exibir gráfico de correlação
+st.write("### 🔍 Análise de Correlação")
+fig, ax = plt.subplots(figsize=(10, 6))
+sns.heatmap(df.corr(), annot=True, cmap="coolwarm", fmt=".2f", linewidths=0.5, ax=ax)
+st.pyplot(fig)
+
 # Sidebar para entrada de dados
-st.sidebar.header("📊 Insira os dados do aluno para prever o IAA_2022")
+st.sidebar.header("📊 Insira os dados do aluno para prever o IAA")
+explicacao_variaveis = {
+    "INDE": "Índice de Desenvolvimento Educacional",
+    "IEG": "Índice de Engajamento Geral",
+    "IPV": "Índice de Ponto de Virada",
+    "IDA": "Índice de Desenvolvimento Acadêmico",
+    "NOTA_MAT": "Nota de Matemática",
+    "NOTA_PORT": "Nota de Português",
+    "CG": "Carga de Grau",
+    "CT": "Carga Total",
+    "QTD_AVAL": "Quantidade de Avaliações",
+    "FASE": "Fase Acadêmica do Aluno",
+}
+
 dados_usuario = []
 for feature in X.columns:
+    st.sidebar.write(f"**{feature}** - {explicacao_variaveis[feature]}")
     valor = st.sidebar.number_input(f"{feature}", min_value=0.0, max_value=10.0, step=0.1, value=5.0)
     dados_usuario.append(valor)
 
 # Botão para realizar previsão
-if st.sidebar.button("🔍 Prever IAA_2022"):
+if st.sidebar.button("🔍 Prever IAA"):
     dados_usuario_np = np.array(dados_usuario).reshape(1, -1)
     dados_usuario_scaled = scaler.transform(dados_usuario_np)
     previsao = model.predict(dados_usuario_scaled)[0]
-    st.success(f"🎯 Previsão do IAA_2022: {previsao:.2f}")
+    st.success(f"🎯 Previsão do IAA: {previsao:.2f}")
 
 # Rodapé
 st.markdown("---")
