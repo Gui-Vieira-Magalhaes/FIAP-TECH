@@ -86,33 +86,36 @@ if st.sidebar.radio("Navegação", ["🏆 Conceitos", "📊 Predição do IAA"])
     
     # Adicionar gráficos relevantes
     st.write("### 📊 Visualização de Dados")
+    st.write("#### 🔍 Matriz de Correlação")
+    st.write("Este gráfico exibe a correlação entre todas as variáveis do dataset, ajudando a entender quais variáveis possuem maior influência sobre o IAA.")
     fig, ax = plt.subplots(figsize=(10, 6))
     sns.heatmap(df.corr(), annot=True, cmap="coolwarm", fmt=".2f", linewidths=0.5, ax=ax)
     st.pyplot(fig)
     
-    # Gráfico 1 - Distribuição do IAA
-    st.write("### 🎯 Distribuição do IAA")
+    st.write("#### 📊 Distribuição do IAA")
+    st.write("Este gráfico mostra a distribuição do IAA no dataset, ajudando a identificar tendências e padrões de desempenho acadêmico.")
     fig, ax = plt.subplots()
     sns.histplot(df[target], bins=20, kde=True, ax=ax)
     st.pyplot(fig)
     
-    # Gráfico 2 - Boxplot das Notas
-    st.write("### 🎯 Boxplot das Notas de Matemática e Português")
+    st.write("#### 📊 Boxplot das Notas")
+    st.write("Este boxplot compara as distribuições das notas de Matemática e Português para identificar a variabilidade e possíveis outliers.")
     fig, ax = plt.subplots()
     sns.boxplot(data=df.melt(value_vars=["NOTA_MAT", "NOTA_PORT"], var_name='Disciplina', value_name='Nota'), x='Disciplina', y='Nota', ax=ax)
     st.pyplot(fig)
     
-    # Gráfico 3 - Relação entre IAA e INDE
-    st.write("### 🎯 Relação entre IAA e INDE")
+    st.write("#### 📊 Relação entre IAA e INDE")
+    st.write("Este gráfico mostra a relação entre o Índice de Desenvolvimento Educacional (INDE) e o IAA, ajudando a entender como a qualidade da educação impacta o desempenho acadêmico.")
     fig, ax = plt.subplots()
     sns.scatterplot(data=df, x="INDE", y=target, ax=ax)
     st.pyplot(fig)
     
-    # Gráfico 4 - Comparação de Engajamento (IEG) por Fase Acadêmica
-    st.write("### 🎯 Comparação de Engajamento (IEG) por Fase Acadêmica")
+    st.write("#### 📊 Comparação de Engajamento (IEG) por Fase Acadêmica")
+    st.write("Este gráfico compara os níveis de engajamento dos alunos em diferentes fases acadêmicas, permitindo observar padrões de envolvimento ao longo da jornada escolar.")
     fig, ax = plt.subplots()
     sns.boxplot(data=df, x="FASE", y="IEG", ax=ax)
     st.pyplot(fig)
+
 
 else:
     st.markdown("# 🏆 POSTECH - DTAT - Datathon - Fase 5")
