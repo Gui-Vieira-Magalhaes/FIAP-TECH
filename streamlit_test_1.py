@@ -83,20 +83,26 @@ if st.sidebar.radio("Navegação", ["🏆 Conceitos", "📊 Predição do IAA"])
     
     st.write("### 📊 Escolha do Modelo Preditivo")
     st.write("O **Random Forest** foi escolhido devido à sua robustez em prever valores numéricos, resistência a overfitting e boa interpretabilidade. Por outro lado, **Redes Neurais** podem capturar padrões mais complexos, mas exigem maior poder computacional e são mais difíceis de interpretar. Observamos que, para nosso conjunto de dados, o **Random Forest teve melhor aderência**.")
+    
+    # Adicionar gráficos relevantes
+    st.write("### 📊 Visualização de Dados")
+    fig, ax = plt.subplots(figsize=(10, 6))
+    sns.heatmap(df.corr(), annot=True, cmap="coolwarm", fmt=".2f", linewidths=0.5, ax=ax)
+    st.pyplot(fig)
 
 else:
     st.markdown("# 🏆 POSTECH - DTAT - Datathon - Fase 5")
     st.markdown("### 📌 Integrantes do Grupo: Fábio Cervantes Lima, Guilherme Vieira Magalhães")
     st.write("## 🎯 Explicação das Variáveis")
     for feature in feature_names.values():
-        st.write(f"- **{feature}**: {df[feature].mean():.2f} (média no dataset)")
+        st.write(f"- **{feature}**: {min(10.0, max(0.0, df[feature].mean())):.2f} (média no dataset)")
     
     st.write("## 🎯 Insira os dados do aluno para prever o IAA")
     col1, col2, col3 = st.columns(3)
     dados_usuario = []
     for i, feature in enumerate(feature_names.values()):
         with [col1, col2, col3][i % 3]:
-            valor = st.number_input(f"{feature}", min_value=0.0, max_value=10.0, step=0.1, value=df[feature].mean())
+            valor = st.number_input(f"{feature}", min_value=0.0, max_value=10.0, step=0.1, value=min(10.0, max(0.0, df[feature].mean())))
             dados_usuario.append(valor)
     
     if st.button("🔍 Prever IAA"):
