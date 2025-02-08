@@ -93,17 +93,17 @@ if st.sidebar.radio("Navegação", ["🏆 Conceitos", "📊 Predição do IAA"])
 else:
     st.markdown("# 🏆 POSTECH - DTAT - Datathon - Fase 5")
     st.markdown("### 📌 Integrantes do Grupo: Fábio Cervantes Lima, Guilherme Vieira Magalhães")
+    
     st.write("## 🎯 Explicação das Variáveis")
     for feature in feature_names.values():
-        st.write(f"- **{feature}**: {min(10.0, max(0.0, df[feature].mean())):.2f} (média no dataset)")
+        media_valor = min(10.0, max(0.0, df[feature].mean()))
+        st.write(f"- **{feature}** ({media_valor:.2f}): {feature} representa um aspecto importante da avaliação acadêmica.")
     
     st.write("## 🎯 Insira os dados do aluno para prever o IAA")
-    col1, col2, col3 = st.columns(3)
     dados_usuario = []
-    for i, feature in enumerate(feature_names.values()):
-        with [col1, col2, col3][i % 3]:
-            valor = st.number_input(f"{feature}", min_value=0.0, max_value=10.0, step=0.1, value=min(10.0, max(0.0, df[feature].mean())))
-            dados_usuario.append(valor)
+    for feature in feature_names.values():
+        valor = st.number_input(f"{feature}", min_value=0.0, max_value=10.0, step=0.1, value=min(10.0, max(0.0, df[feature].mean())))
+        dados_usuario.append(valor)
     
     if st.button("🔍 Prever IAA"):
         dados_usuario_np = np.array(dados_usuario).reshape(1, -1)
@@ -114,3 +114,4 @@ else:
         st.success(f"🎯 Previsão do IAA com Random Forest: {rf_previsao:.2f}")
         st.success(f"🎯 Previsão do IAA com Redes Neurais: {nn_previsao:.2f}")
         st.write("📌 **Baseado na avaliação dos modelos, a predição do Random Forest é a mais aderente ao conjunto de dados.**")
+
