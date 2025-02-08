@@ -28,9 +28,13 @@ features = [
 ]
 target = "IAA_2022"
 
+# Renomear colunas para remover o sufixo "_2022"
+feature_names = {col: col.replace("_2022", "") for col in features}
+df = df.rename(columns=feature_names)
+
 # Remover valores nulos
-df = df[features + [target]].dropna()
-X = df[features]
+df = df[list(feature_names.values()) + [target]].dropna()
+X = df[list(feature_names.values())]
 y = df[target]
 
 # Normalizar os dados
@@ -83,13 +87,16 @@ if st.sidebar.radio("Navegação", ["🏆 Conceitos", "📊 Predição do IAA"])
 else:
     st.markdown("# 🏆 POSTECH - DTAT - Datathon - Fase 5")
     st.markdown("### 📌 Integrantes do Grupo: Fábio Cervantes Lima, Guilherme Vieira Magalhães")
-    st.write("## 🎯 Insira os dados do aluno para prever o IAA")
+    st.write("## 🎯 Explicação das Variáveis")
+    for feature in feature_names.values():
+        st.write(f"- **{feature}**: {df[feature].mean():.2f} (média no dataset)")
     
+    st.write("## 🎯 Insira os dados do aluno para prever o IAA")
     col1, col2, col3 = st.columns(3)
     dados_usuario = []
-    for i, feature in enumerate(features):
+    for i, feature in enumerate(feature_names.values()):
         with [col1, col2, col3][i % 3]:
-            valor = st.number_input(f"{feature}", min_value=0.0, max_value=10.0, step=0.1, value=5.0)
+            valor = st.number_input(f"{feature}", min_value=0.0, max_value=10.0, step=0.1, value=df[feature].mean())
             dados_usuario.append(valor)
     
     if st.button("🔍 Prever IAA"):
