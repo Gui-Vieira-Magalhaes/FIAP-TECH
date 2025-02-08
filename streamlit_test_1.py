@@ -56,8 +56,9 @@ if st.sidebar.radio("Navegação", ["🏆 Conceitos", "📊 Predição do IAA"])
     st.markdown("# 🏆 POSTECH - DTAT - Datathon - Fase 5")
     st.markdown("### 📌 Integrantes do Grupo: Fábio Cervantes Lima, Guilherme Vieira Magalhães")
     st.write("### ℹ️ O que é o IAA?")
-    st.write("O Índice de Aproveitamento Acadêmico (IAA) mede o desempenho acadêmico dos alunos levando em consideração notas, participação e engajamento. Essa métrica ajuda a avaliar a evolução dos estudantes ao longo do tempo e pode ser utilizada para prever o desempenho futuro, possibilitando intervenções educacionais estratégicas.")
+    st.write("O Índice de Aproveitamento Acadêmico (IAA) é uma métrica fundamental para medir o desempenho acadêmico dos alunos, levando em consideração uma variedade de fatores, incluindo notas escolares, participação em atividades extracurriculares e nível de engajamento no processo educacional. O IAA não apenas fornece um retrato atual do progresso acadêmico dos estudantes, mas também permite a identificação de padrões e tendências ao longo do tempo. Isso possibilita que gestores educacionais, professores e pesquisadores compreendam melhor os desafios enfrentados pelos alunos e desenvolvam estratégias eficazes para melhorar o aprendizado. Além disso, o IAA é uma ferramenta essencial para prever o desempenho futuro dos estudantes, o que facilita a implementação de intervenções pedagógicas direcionadas, reduzindo índices de evasão escolar e aumentando a taxa de sucesso acadêmico. Seu uso possibilita que instituições educacionais tomem decisões embasadas em dados, contribuindo para um ensino mais personalizado e eficiente."))
     
+
     # Avaliação dos modelos
     rf_pred = rf_model.predict(X_test)
     nn_pred = nn_model.predict(X_test)
